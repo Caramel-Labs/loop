@@ -1,0 +1,71 @@
+@app.get("/users/")
+async def get_users():
+    users = db["users"]
+    print(f"Users: {users}")
+    users = users.find({})
+
+    # return Profile(users=await users.find().to_list(1000))
+    return {"users": users}
+
+    # users_collection = db.get_collection("users")
+    # users = users_collection.find({})
+    # return Profile(users=users)
+
+    # users_collection = db.get_collection("users")
+    # users = users_collection.find({})
+
+    # # Assuming `users` is a list of dictionaries with keys matching the Profile model's fields
+    # profiles = [Profile(**user) for user in users]
+
+    # return profiles
+
+class UserInterests(Document):
+    user_id = StringField(primary_key=True)
+    interests = StringField()
+
+
+class EventHashtags(Document):
+    event_id = StringField(primary_key=True)
+    hashtags = StringField()
+
+
+class Profile(BaseModel):
+    firstName: Optional[str]
+    lastName: Optional[str]
+    username: str = Field(..., min_length=5, max_length=255)
+    password: str = Field(..., min_length=8, max_length=1024)
+    email: str = Field(..., min_length=5, max_length=255)
+    intake: int
+    faculty: str
+    eventId: Optional[List[str]]
+    date: Optional[str]
+    isAdmin: bool
+    favouriteEventIds: Optional[List[str]]
+
+    class Config:
+        orm_mode = True
+
+
+# client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI_STRING"))
+
+
+# check whether data comes from request URI
+    print(f"User is {user_id}")
+    print(f"Event is {event_id}")
+
+    # get relevant user and event from database
+    user = users_collection.find_one({"_id": user_id})
+    user = individual_serial(users_collection.find())
+    event = events_collection.find_one({"_id": event_id})
+
+    interests = user.__getattribute__("firstName")
+    print(f"User interests: {interests}")
+    hashtags = event.__getattribute__("lastName")
+    print(f"Event hashtags: {hashtags}")
+
+
+# user_interests = np.array(interests).reshape(1, -1)
+    # for event_tags in event_hashtags:
+    #     event_tags = np.array(event_tags).reshape(1, -1)
+    #     score = cosine_similarity(user_interests, event_tags)
+    #     scores.append(score[0][0])
